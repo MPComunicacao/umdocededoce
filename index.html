@@ -98,10 +98,7 @@
     <textarea id="notes" placeholder="Ex.: sem lactose, ponto da calda, horário de retirada..."></textarea>
   </div>
   <div class="section">
-    <button id="whatsBtn" class="btn" disabled>
-      <span aria-hidden>🟢</span>
-      Finalizar no WhatsApp
-    </button>
+    <button id="whatsBtn" class="btn" disabled>Finalizar no WhatsApp</button>
     <div class="foot">Ao clicar, abriremos seu WhatsApp com o resumo do pedido preenchido. Você pode revisar antes de enviar.</div>
   </div>
 </aside>
@@ -109,106 +106,94 @@
 <div class="foot">Dica: personalize a lista de produtos e o número do WhatsApp diretamente no código. Tudo roda localmente, sem servidor.</div>
 </div>
 <script>
-const STORE={name:'Confeitaria Doce Encanto',phone:'5511997656674',currency:{locale:'pt-BR',code:'BRL'}};
+const STORE={name:'Confeitaria Um Doce de Doce',phone:'5511997656674',currency:{locale:'pt-BR',code:'BRL'}};
 const PRODUCTS=[
-  {id:'agua-sem-gas',name:'Água sem Gás 500ml',price:6.00},
-  {id:'agua-com-gas',name:'Água com Gás 500ml',price:6.00},
-  {id:'coca',name:'Coca-Cola 350ml',price:7.10},
-  {id:'coca-zero',name:'Coca-Cola Zero 350ml',price:7.10},
-  {id:'guarana',name:'Guaraná 350ml',price:7.10},
-  {id:'suco-265',name:'Suco Lata 265ml',price:7.80},
-  {id:'suco-290',name:'Suco Lata 290ml',price:9.00},
-  {id:'cafe-expresso',name:'Café Expresso',price:8.70},
-  {id:'cafe-leite',name:'Café com Leite',price:9.60},
-  {id:'capuccino',name:'Capuccino',price:15.00},
-  {id:'cha-quente',name:'Chá Quente',price:7.60},
-  {id:'bolo-caseiro',name:'Bolo Caseiro Fatia',price:8.70},
-  {id:'bolo-confeitado',name:'Bolo Confeitado Fatia',price:19.80},
-  {id:'bolo-pote',name:'Bolo no Pote',price:18.00},
-  {id:'pao-queijo',name:'Mini Pão de Queijo (4 unids)',price:9.60},
-  {id:'panini',name:'Panini (4 unids)',price:16.20},
-  {id:'quiche-cebola',name:'Quiche de Cebola Carmelizada',price:23.10},
-  {id:'quiche-caprese',name:'Quiche Caprese',price:23.10},
-  {id:'croissant-presunto',name:'Croissant com Presunto e Queijo',price:23.10},
-  {id:'croissant-queijo',name:'Croissant com Queijo Branco e Tomate Confit',price:26.00},
-  {id:'croissant-nutella',name:'Croissant com Nutella',price:24.00},
-  {id:'pao-mel',name:'Pão de Mel',price:9.00},
-  {id:'palha-italiana',name:'Palha Italiana',price:9.00},
-  {id:'brownie',name:'Brownie',price:9.00},
-  {id:'suspiro',name:'Suspiro (Pacote 40g)',price:15.20},
-  {id:'rosa-suspiro',name:'Rosa de Suspiro Recheada com Brigadeiro',price:8.00}
+{ id:'agua-sem-gas', name:'Água sem Gás 500ml', price:6.00 },
+{ id:'agua-com-gas', name:'Água com Gás 500ml', price:6.00 },
+{ id:'coca', name:'Coca-Cola 350ml', price:7.10 },
+{ id:'coca-zero', name:'Coca-Cola Zero 350ml', price:7.10 },
+{ id:'guarana', name:'Guaraná 350ml', price:7.10 },
+{ id:'suco-265', name:'Suco Lata 265ml', price:7.80 },
+{ id:'suco-290', name:'Suco Lata 290ml', price:9.00 },
+{ id:'cafe-expresso', name:'Café Expresso', price:8.70 },
+{ id:'cafe-leite', name:'Café com Leite', price:9.60 },
+{ id:'capuccino', name:'Capuccino', price:15.00 },
+{ id:'cha-quente', name:'Chá Quente', price:7.60 },
+{ id:'bolo-caseiro', name:'Bolo Caseiro Fatia', price:8.70 },
+{ id:'bolo-confeitado', name:'Bolo Confeitado Fatia', price:19.80 },
+{ id:'bolo-pote', name:'Bolo no Pote', price:18.00 },
+{ id:'pao-queijo', name:'Mini Pão de Queijo (4 unids)', price:9.60 },
+{ id:'panini', name:'Panini (4 unids)', price:16.20 },
+{ id:'quiche-cebola', name:'Quiche de Cebola Carmelizada', price:23.10 },
+{ id:'quiche-caprese', name:'Quiche Caprese', price:23.10 },
+{ id:'croissant-presunto', name:'Croissant com Presunto e Queijo', price:23.10 },
+{ id:'croissant-queijo', name:'Croissant com Queijo Branco e Tomate Confit', price:26.00 },
+{ id:'croissant-nutella', name:'Croissant com Nutella', price:24.00 },
+{ id:'pao-mel', name:'Pão de Mel', price:9.00 },
+{ id:'palha-italiana', name:'Palha Italiana', price:9.00 },
+{ id:'brownie', name:'Brownie', price:9.00 },
+{ id:'suspiro', name:'Suspiro (Pacote 40g)', price:15.20 },
+{ id:'rosa-suspiro', name:'Rosa de Suspiro Recheada com Brigadeiro', price:8.00 }
 ];
 const cart=new Map();
 const fmt=n=>n.toLocaleString(STORE.currency.locale,{style:'currency',currency:STORE.currency.code});
 function renderProducts(){
-  const wrap=document.getElementById('products');
-  wrap.innerHTML='';
+  const wrap=document.getElementById('products'); wrap.innerHTML='';
   PRODUCTS.forEach(p=>{
-    const el=document.createElement('div');
-    el.className='prod';
+    const el=document.createElement('div'); el.className='prod';
     el.innerHTML=`<div class="thumb"></div><div style="min-width:0"><h3>${p.name}</h3><div class="price">${fmt(p.price)}</div></div><div class="spacer"></div><div class="qty" data-id="${p.id}"><button>−</button><input type="number" min="0" step="1" value="0" inputmode="numeric" /><button>+</button></div>`;
     wrap.appendChild(el);
   });
   wrap.querySelectorAll('.qty').forEach(qty=>{
-    const id=qty.getAttribute('data-id');
-    const product=PRODUCTS.find(p=>p.id===id);
+    const id=qty.getAttribute('data-id'); const product=PRODUCTS.find(p=>p.id===id);
     const [btnMinus,input,btnPlus]=qty.children;
-    const sync=()=>{
-      const v=Math.max(0,parseInt(input.value||'0',10));
-      input.value=v;
-      if(v>0) cart.set(id,{product,qty:v}); else cart.delete(id);
-      updateCartUI();
-    };
-    btnMinus.addEventListener('click',()=>{input.value=Math.max(0,(parseInt(input.value||'0',10)-1));sync();});
-    btnPlus.addEventListener('click',()=>{input.value=(parseInt(input.value||'0',10)+1);sync();});
+    const sync=()=>{ const v=Math.max(0,parseInt(input.value||'0',10)); input.value=v; if(v>0) cart.set(id,{product,qty:v}); else cart.delete(id); updateCartUI(); };
+    btnMinus.addEventListener('click',()=>{ input.value=Math.max(0,(parseInt(input.value||'0',10)-1)); sync(); });
+    btnPlus.addEventListener('click',()=>{ input.value=(parseInt(input.value||'0',10)+1); sync(); });
     input.addEventListener('input',sync);
   });
 }
 function updateCartUI(){
-  const list=document.getElementById('cartList');
-  const emptyHint=document.getElementById('emptyHint');
-  const itemsCount=Array.from(cart.values()).reduce((s,i)=>s+i.qty,0);
-  document.getElementById('itemsCount').textContent=itemsCount;
-  list.innerHTML='';
-  if(cart.size===0){emptyHint.style.display='block';}else{emptyHint.style.display='none';}
+  const list=document.getElementById('cartList'); const emptyHint=document.getElementById('emptyHint');
+  const itemsCount=Array.from(cart.values()).reduce((s,i)=>s+i.qty,0); document.getElementById('itemsCount').textContent=itemsCount;
+  list.innerHTML=''; if(cart.size===0){emptyHint.style.display='block';}else{emptyHint.style.display='none';}
   let subtotal=0;
-  cart.forEach(({product,qty})=>{
-    const line=product.price*qty;subtotal+=line;
-    const row=document.createElement('div');
-    row.className='cart-item';
+  cart.forEach(({product,qty})=>{ const line=product.price*qty; subtotal+=line;
+    const row=document.createElement('div'); row.className='cart-item';
     row.innerHTML=`<div style="display:flex; gap:8px; align-items:center"><span class="tag">${qty}×</span><div>${product.name}</div></div><div>${fmt(line)}</div>`;
     list.appendChild(row);
   });
   const deliveryMode=document.getElementById('deliveryMode').value;
-  const feeRow=document.getElementById('deliveryFeeRow');
-  feeRow.style.display=deliveryMode==='entrega'?'flex':'none';
+  const feeRow=document.getElementById('deliveryFeeRow'); feeRow.style.display=deliveryMode==='entrega'?'flex':'none';
   const fee=deliveryMode==='entrega'?parseFloat((document.getElementById('deliveryFee').value||'0').replace(',', '.'))||0:0;
   document.getElementById('subtotal').textContent=fmt(subtotal);
   document.getElementById('total').textContent=fmt(subtotal+fee);
   document.getElementById('whatsBtn').disabled=(cart.size===0);
 }
 function buildWhatsAppText(){
-  const customer=document.getElementById('customerName').value.trim();
-  const phone=document.getElementById('customerPhone').value.trim();
-  const deliveryMode=document.getElementById('deliveryMode').value;
-  const address=document.getElementById('address').value.trim();
+  const now=new Date(); const orderId=now.toISOString().slice(0,19).replace(/[-:T]/g,'');
+  const customer=document.getElementById('customerName').value.trim(); const phone=document.getElementById('customerPhone').value.trim();
+  const deliveryMode=document.getElementById('deliveryMode').value; const address=document.getElementById('address').value.trim();
   const notes=document.getElementById('notes').value.trim();
   let subtotal=0; let lines=[];
-  cart.forEach(({product,qty})=>{
-    const line=product.price*qty;subtotal+=line;
-    lines.push(`- ${product.name} x${qty} — ${fmt(product.price)} = ${fmt(line)}`);
-  });
+  cart.forEach(({product,qty})=>{ const line=product.price*qty; subtotal+=line; lines.push(`- ${product.name} x${qty} — ${fmt(product.price)} = ${fmt(line)}`); });
   const fee=deliveryMode==='entrega'?parseFloat((document.getElementById('deliveryFee').value||'0').replace(',', '.'))||0:0;
   const total=subtotal+fee;
-  const txt=[`*Novo pedido — ${STORE.name}*`, '', '*Itens*:', ...lines, '', `Subtotal: ${fmt(subtotal)}`, (deliveryMode==='entrega'?`Taxa de entrega: ${fmt(fee)}`:`Entrega: retirada no local`), `*Total: ${fmt(total)}*`, '', (customer?`Cliente: ${customer}`:''), (phone?`Contato: ${phone}`:''), (deliveryMode==='entrega'&&address?`Endereço: ${address}`:''), (notes?`Obs.: ${notes}`:'')].filter(Boolean).join('\n');
+  const txt=[
+    `Novo pedido — ${orderId}`, `#${orderId}`, '', 'Itens:', ...lines, '',
+    `Subtotal: ${fmt(subtotal)}`, (deliveryMode==='entrega'?`Taxa de entrega: ${fmt(fee)}`:`Entrega: retirada no local`),
+    `Total: ${fmt(total)}`, '', (customer?`Cliente: ${customer}`:''), (phone?`Contato: ${phone}`:''), (deliveryMode==='entrega'&&address?`Endereço: ${address}`:''), (notes?`Obs.: ${notes}`:'')
+  ].filter(Boolean).join('\n');
   return encodeURIComponent(txt);
 }
-document.getElementById('whatsBtn').addEventListener('click',()=>{
-  const url=`https://wa.me/${STORE.phone}?text=${buildWhatsAppText()}`;
-  window.open(url,'_blank');
-});
-renderProducts();
-updateCartUI();
+function init(){
+  document.getElementById('storeName').textContent=STORE.name;
+  renderProducts(); updateCartUI();
+  document.getElementById('deliveryMode').addEventListener('change',updateCartUI);
+  document.getElementById('deliveryFee').addEventListener('input',updateCartUI);
+  document.getElementById('whatsBtn').addEventListener('click',()=>{ window.open(`https://wa.me/${STORE.phone}?text=${buildWhatsAppText()}`,'_blank'); });
+}
+init();
 </script>
 </body>
 </html>
